@@ -32,9 +32,15 @@ export const typeDefs = `#graphql
     # or where queries can start from 
 
     type Query {
-        reviews: [Review]
+        reviews: [Review] # return array of all reviews
+        # entry point to the graph for a single review with a query variable (that is required):
+        review(id: ID!): Review
+
         games: [Game]
-        authors: [Author] 
+        game(id: ID!): Game
+
+        authors: [Author]
+        author(id: ID!): Author 
     } 
 
 `;
