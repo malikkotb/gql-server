@@ -59,9 +59,29 @@ const resolvers = {
         deleteGame(_, args) {
             // if we had an actual database hooked up: return context.db. ...
             // i.e. in mongodb: you would use the library for mogodb to connect to that and delete a game that way 
-            db.games = db.authors.filter((game) => game.id !== args.id)
+            db.games = db.games.filter((game) => game.id !== args.id)
 
             return db.games
+        },
+        // addGame(game: AddGameInput!): Game
+        addGame(_, args) {
+            let game = {
+                ...args.game, // game is the name of the variable in the schema
+                id: Math.floor(Math.random() * 1000).toString() // there are better id-generator libraries for this
+            }
+            db.games.push(game)
+            return game
+        },
+        updateGame(_, args) {
+            db.games = db.games.map((game) => {
+                if (game.id === args.id) {
+                    return {...game, ...args.edits}
+                }
+                return game
+            })
+
+            return db.games.find((game) => game.id === args.id)
+
         }
     }
 }

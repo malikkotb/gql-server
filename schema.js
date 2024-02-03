@@ -52,6 +52,27 @@ export const typeDefs = `#graphql
     type Mutation {
         # this mutation deletes a game -> we need the game id for that; return type is the updated list of remaining games
         deleteGame(id: ID!): [Game]
+
+        # this mutation adds a new game
+        addGame(game: AddGameInput!): Game
+
+        # this edits|updates an existing game
+        updateGame(id: ID!, edits: EditGameInput!): Game
+
     }
+ 
+    # special input type which allows to group together several arguments into 1 type; which can be used a single argument elsewhere (like in a mutation)
+    input AddGameInput {
+        title: String!
+        platform: [String!]!
+    }
+
+    input EditGameInput {
+        title: String
+        platform: [String!]
+    }
+
+
+
 
 `;
