@@ -10,18 +10,22 @@ export const typeDefs = `#graphql
         id: ID! # '!' makes this field required & can't be null
         title: String!
         platform: [String!]! # array of strings
+        reviews: [Review!] # we can have no reviews, but if we have a review, that can't be null
     }
 
     type Review {
         id: ID!
         rating: Int!
         content: String!
+        game: Game! # related data field, Game is required for a Review
+        author: Author!
     }
 
     type Author {
         id: ID!
         name: String!
         verified: Boolean!
+        reviews: [Review!]
     }
 
     # The "Query" type is special: it lists all of the available queries that
@@ -42,5 +46,12 @@ export const typeDefs = `#graphql
         authors: [Author]
         author(id: ID!): Author 
     } 
+
+    # type Mutation is for any kind of change (add, delete, edit data)
+
+    type Mutation {
+        # this mutation deletes a game -> we need the game id for that; return type is the updated list of remaining games
+        deleteGame(id: ID!): [Game]
+    }
 
 `;

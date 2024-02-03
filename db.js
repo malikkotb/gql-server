@@ -24,7 +24,7 @@ let reviews = [
     {id: "6", rating: 4, content: "Really fun and engaging, great for all ages.", game_id: "2", author_id: "3"},
     {id: "7", rating: 8, content: "Masterpiece of game design, must-play!", game_id: "1", author_id: "2"},
 ];
-
+ 
 
 export default {games, authors, reviews}
 

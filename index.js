@@ -9,6 +9,7 @@ const resolvers = {
     Query: { // matches the type name
         // resolver functions for each of the properties defined on our root Query type
         // resolver functions handle the queruies based on our schema
+        // all resolvers take in 3 arguments: (parent, args, context, info)
         games() {
             return db.games
         },
@@ -27,7 +28,42 @@ const resolvers = {
         author(_, args) {
             return db.authors.find((author) => author.id === args.id)
         },
-     }
+    },
+    // Game object (related data)
+    Game: {
+       // resolver functions for related (nested) data
+        reviews(parent) {
+            // we can access the ID of the game via the parent argument bc. the parent argument is a reference to the value returned by the previous (parent) resolver
+            // the parent argument will be a game object, which has an ID
+            // and we can use that ID to return all the reviews associated with that Game ID 
+            return db.reviews.filter((review) => review.game_id === parent.id)
+        }
+    },
+    Author: {
+        // returns reviews of a particular author
+        reviews(parent) {
+            return db.reviews.filter((review) => review.author_id  === parent.id)
+        }
+    },
+    Review: {
+        // get game and author associated with a particular review
+        author(parent) { // parent here, is a single review
+            return db.authors.find((author) => author.id === parent.author_id) // find author associated with the parent.author_id (which is the id of the review)
+        },
+        game(parent) {
+            return db.games.find((game) => game.id === parent.game_id)
+        }
+    },
+    Mutation: {
+        // resolver for deleteGame
+        deleteGame(_, args) {
+            // if we had an actual database hooked up: return context.db. ...
+            // i.e. in mongodb: you would use the library for mogodb to connect to that and delete a game that way 
+            db.games = db.authors.filter((game) => game.id !== args.id)
+
+            return db.games
+        }
+    }
 }
 
 /*
